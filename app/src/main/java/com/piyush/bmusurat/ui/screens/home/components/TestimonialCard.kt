@@ -1,23 +1,10 @@
 package com.piyush.bmusurat.ui.screens.home.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BrokenImage
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,20 +20,30 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.piyush.bmusurat.data.models.StudentTestimonial
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TestimonialCard(testimonial: StudentTestimonial) {
+
+    val raw = testimonial.testimonial.trim()
+    val formattedText = when {
+        raw.startsWith("\"") && raw.endsWith("\"") -> raw
+        raw.startsWith("\"") -> raw + "\""
+        raw.endsWith("\"") -> "\"$raw"
+        else -> "\"$raw\""
+    }
+
     Card(
         modifier = Modifier
             .width(300.dp)
-            .height(235.dp),
+            .height(245.dp),
         shape = CardDefaults.shape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f)
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.55f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SubcomposeAsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -58,9 +55,7 @@ fun TestimonialCard(testimonial: StudentTestimonial) {
                         .size(50.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop,
-                    loading = {
-                        ShimmerBox(modifier = Modifier.fillMaxSize())
-                    },
+                    loading = { ShimmerBox(modifier = Modifier.fillMaxSize()) },
                     error = {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -75,25 +70,32 @@ fun TestimonialCard(testimonial: StudentTestimonial) {
                         }
                     }
                 )
+
                 Spacer(Modifier.width(12.dp))
+
                 Column {
                     Text(
                         text = testimonial.name,
-                        style = MaterialTheme.typography.bodyLargeEmphasized,
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = testimonial.designation,
-                        style = MaterialTheme.typography.bodySmallEmphasized,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-            Spacer(Modifier.height(12.dp))
+
+            Spacer(Modifier.height(14.dp))
+
             Text(
-                text = "\"${testimonial.testimonial}\"",
-                style = MaterialTheme.typography.bodyMedium,
+                text = formattedText,
+                style = MaterialTheme.typography.bodyLarge,
                 fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier.weight(1f),
                 maxLines = 7,
                 overflow = TextOverflow.Ellipsis

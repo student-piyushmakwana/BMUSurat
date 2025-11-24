@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,18 +34,21 @@ fun ExpandableInfoSection(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val itemsToShow = if (isExpanded) items else items.take(3)
 
-    Column(modifier = Modifier.padding(horizontal = 0.dp)) {
-        SectionTitle(title = title, modifier = Modifier.padding(horizontal = 16.dp))
+    Column {
+        SectionTitle(
+            title = title,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
 
         Column(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             itemsToShow.forEachIndexed { index, item ->
-                val topRadius = if (index == 0) 24.dp else 4.dp
-                val bottomRadius = if (index == itemsToShow.lastIndex) 24.dp else 4.dp
+                val topRadius = if (index == 0) 24.dp else 6.dp
+                val bottomRadius = if (index == itemsToShow.lastIndex) 24.dp else 6.dp
 
-                val itemShape = RoundedCornerShape(
+                val shape = RoundedCornerShape(
                     topStart = topRadius,
                     topEnd = topRadius,
                     bottomStart = bottomRadius,
@@ -55,7 +59,7 @@ fun ExpandableInfoSection(
                     title = item.description,
                     date = item.date,
                     onClick = { onItemClick(item) },
-                    shape = itemShape
+                    shape = shape
                 )
             }
         }
@@ -68,11 +72,10 @@ fun ExpandableInfoSection(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                if (isExpanded) {
-                    Text(text = "View Less")
-                } else {
-                    Text(text = "View All (${items.size})")
-                }
+                Text(
+                    text = if (isExpanded) "View Less" else "View All (${items.size})",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

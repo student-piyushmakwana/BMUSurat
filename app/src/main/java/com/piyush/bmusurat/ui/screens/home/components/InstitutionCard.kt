@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Apartment
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun InstitutionCard(
     institution: Institution,
@@ -36,9 +34,7 @@ fun InstitutionCard(
         modifier = modifier
             .width(160.dp)
             .height(180.dp)
-            .clickable{
-                onClick()
-            },
+            .clickable { onClick() },
         shape = CardDefaults.shape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f)
@@ -58,16 +54,21 @@ fun InstitutionCard(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(32.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(modifier = Modifier.height(7.dp))
+
             Text(
                 text = institution.shortName,
-                style = MaterialTheme.typography.bodyLargeEmphasized,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(2.dp))
+
+            Spacer(modifier = Modifier.height(3.dp))
+
             Text(
                 text = institution.name,
                 style = MaterialTheme.typography.bodySmall,

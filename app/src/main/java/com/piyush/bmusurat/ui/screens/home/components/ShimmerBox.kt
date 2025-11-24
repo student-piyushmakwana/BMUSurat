@@ -26,16 +26,16 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     val transition = rememberInfiniteTransition(label = "shimmerTransition")
 
     val shimmerColors = listOf(
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.55f),
+        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.20f),
+        MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.55f)
     )
 
-    val startOffsetX by transition.animateFloat(
+    val offsetX by transition.animateFloat(
         initialValue = -2 * size.width.toFloat(),
         targetValue = 2 * size.width.toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
+            animation = tween(durationMillis = 1200, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = "shimmerOffsetX"
@@ -44,13 +44,12 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     background(
         brush = Brush.linearGradient(
             colors = shimmerColors,
-            start = Offset(startOffsetX, 0f),
-            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+            start = Offset(offsetX, 0f),
+            end = Offset(offsetX + size.width, size.height.toFloat())
         )
-    )
-        .onGloballyPositioned {
-            size = it.size
-        }
+    ).onGloballyPositioned {
+        size = it.size
+    }
 }
 
 @Composable
