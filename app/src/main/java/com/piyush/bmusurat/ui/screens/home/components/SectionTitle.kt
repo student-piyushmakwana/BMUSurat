@@ -1,0 +1,24 @@
+package com.piyush.bmusurat.ui.screens.home.components
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun SectionTitle(
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleLargeEmphasized,
+        fontWeight = FontWeight.SemiBold,
+        modifier = modifier.padding(vertical = 8.dp)
+    )
+}

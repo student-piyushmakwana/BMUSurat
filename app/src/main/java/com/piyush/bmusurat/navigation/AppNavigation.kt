@@ -1,15 +1,14 @@
 package com.piyush.bmusurat.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.piyush.bmusurat.ui.screens.HomeScreen
 import com.piyush.bmusurat.ui.screens.SplashScreen
+import com.piyush.bmusurat.ui.screens.home.HomeScreen
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
+fun AppNavigation(navController: NavHostController) {
 
     NavHost(
         navController = navController,
@@ -20,7 +19,7 @@ fun AppNavigation() {
         }
 
         composable(route = Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
     }
 }
