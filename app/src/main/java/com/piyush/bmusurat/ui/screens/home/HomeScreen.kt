@@ -4,8 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.SignalWifiBad
+import androidx.compose.material.icons.rounded.Wifi
+import androidx.compose.material.icons.rounded.WifiOff
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -26,17 +30,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.piyush.bmusurat.ui.screens.home.components.ErrorScreen
 import com.piyush.bmusurat.ui.screens.home.components.HomeDataContent
+import com.piyush.bmusurat.ui.screens.home.components.IconSnackBar
 import com.piyush.bmusurat.ui.screens.home.components.NoInternetScreen
+import com.piyush.bmusurat.ui.screens.home.components.WavyProgressIndicator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -49,7 +52,10 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHostState = remember { SnackbarHostState() }
+
     val scope = rememberCoroutineScope()
+
+    var currentSnackIcon by remember { mutableStateOf(Icons.Rounded.Info) }
 
     val pullToRefreshState = rememberPullToRefreshState()
 
@@ -59,32 +65,26 @@ fun HomeScreen(
         if (isFirstNetworkCheck) {
             isFirstNetworkCheck = false
             if (!uiState.isNetworkAvailable && uiState.data != null) {
+                currentSnackIcon = Icons.Rounded.SignalWifiBad
                 scope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = "Your device is not connected to the internet.",
-                        withDismissAction = true
-                    )
+                    snackBarHostState.showSnackbar("Your device is not connected to the internet.")
                 }
             }
             return@LaunchedEffect
         }
 
         if (uiState.isNetworkAvailable) {
+            currentSnackIcon = Icons.Rounded.Wifi
             scope.launch {
                 snackBarHostState.currentSnackbarData?.dismiss()
-                snackBarHostState.showSnackbar(
-                    message = "Seems like you’re connected now.",
-                    withDismissAction = true
-                )
+                snackBarHostState.showSnackbar("You're back online.")
             }
         } else {
             if (uiState.data != null) {
+                currentSnackIcon = Icons.Rounded.WifiOff
                 scope.launch {
                     snackBarHostState.currentSnackbarData?.dismiss()
-                    snackBarHostState.showSnackbar(
-                        message = "Looks like your connection is down.",
-                        withDismissAction = true
-                    )
+                    snackBarHostState.showSnackbar("You're offline right now.")
                 }
             }
         }
@@ -92,7 +92,14 @@ fun HomeScreen(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState,modifier = Modifier.padding(horizontal = 16.dp)) { data ->
+                IconSnackBar(
+                    icon = currentSnackIcon, // we'll define this state below
+                    message = data.visuals.message
+                )
+            }
+        },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -131,15 +138,7 @@ fun HomeScreen(
             ) {
                 when {
                     uiState.isLoading && uiState.data == null -> {
-                        val thickStrokeWidth = with(LocalDensity.current) { 8.dp.toPx() }
-                        val thickStroke = remember(thickStrokeWidth) {
-                            Stroke(width = thickStrokeWidth, cap = StrokeCap.Round)
-                        }
-                        CircularWavyProgressIndicator(
-                            modifier = Modifier.size(62.dp),
-                            stroke = thickStroke,
-                            trackStroke = thickStroke
-                        )
+                        WavyProgressIndicator(modifier = Modifier.size(52.dp))
                     }
 
                     uiState.data != null -> {
