@@ -10,6 +10,8 @@ import com.piyush.bmusurat.data.datastore.PreferencesDataStore
 import com.piyush.bmusurat.data.local.HomeDao
 import com.piyush.bmusurat.data.repository.HomeRepository
 import com.piyush.bmusurat.data.repository.HomeRepositoryImpl
+import com.piyush.bmusurat.data.repository.ProgramRepository
+import com.piyush.bmusurat.data.repository.ProgramRepositoryImpl
 import com.piyush.bmusurat.util.ConnectivityObserver
 import com.piyush.bmusurat.util.NetworkConnectivityObserver
 import dagger.Module
@@ -76,6 +78,15 @@ object AppModule {
         preferencesDataStore: PreferencesDataStore
     ): HomeRepository {
         return HomeRepositoryImpl(apiService, dao, preferencesDataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProgramRepository(
+        apiService: ApiService,
+        preferencesDataStore: PreferencesDataStore
+    ): ProgramRepository {
+        return ProgramRepositoryImpl(apiService,preferencesDataStore)
     }
 
     @Provides

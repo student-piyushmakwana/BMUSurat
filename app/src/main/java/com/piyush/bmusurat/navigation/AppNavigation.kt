@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.piyush.bmusurat.ui.screens.SplashScreen
 import com.piyush.bmusurat.ui.screens.home.HomeScreen
+import com.piyush.bmusurat.ui.screens.program.ProgramDetailScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -20,6 +21,10 @@ fun AppNavigation(navController: NavHostController) {
 
         composable(route = Screen.Home.route) {
             HomeScreen(navController = navController)
+        }
+
+        composable(route = Screen.ProgramDetail.route) {
+            ProgramDetailScreen(navController = navController)
         }
     }
 }

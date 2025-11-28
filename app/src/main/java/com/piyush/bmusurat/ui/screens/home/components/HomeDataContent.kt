@@ -40,6 +40,7 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.piyush.bmusurat.data.models.HomeResponse
+import com.piyush.bmusurat.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -149,7 +150,9 @@ fun HomeDataContent(
                 items(institutionList) { institution ->
                     InstitutionCard(
                         institution = institution,
-                        onClick = {}
+                        onClick = {
+                            navController.navigate(Screen.ProgramDetail.createRoute(institution.shortName))
+                        }
                     )
                 }
             }
