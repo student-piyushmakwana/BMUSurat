@@ -50,7 +50,8 @@ fun HomeDataContent(
     data: HomeResponse,
     snackBarHostState: SnackbarHostState,
     scope: CoroutineScope,
-    navController: NavController
+    navController: NavController,
+    onSignInClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -113,9 +114,7 @@ fun HomeDataContent(
 
         item {
             FilledTonalButton(
-                onClick = {
-                    Log.d("HomeScreen", "Student Sign-in Button clicked")
-                },
+                onClick = onSignInClick,
                 shapes = ButtonDefaults.shapes(),
                 modifier = Modifier
                     .fillMaxWidth()

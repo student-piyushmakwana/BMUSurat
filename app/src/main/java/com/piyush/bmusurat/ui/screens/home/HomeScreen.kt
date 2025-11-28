@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import com.piyush.bmusurat.ui.screens.home.components.ErrorScreen
 import com.piyush.bmusurat.ui.screens.home.components.HomeDataContent
 import com.piyush.bmusurat.ui.screens.home.components.IconSnackBar
 import com.piyush.bmusurat.ui.screens.home.components.NoInternetScreen
+import com.piyush.bmusurat.ui.screens.home.components.SignInBottomSheet
 import com.piyush.bmusurat.ui.screens.home.components.WavyProgressIndicator
 import kotlinx.coroutines.launch
 
@@ -52,14 +54,14 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHostState = remember { SnackbarHostState() }
-
     val scope = rememberCoroutineScope()
-
     var currentSnackIcon by remember { mutableStateOf(Icons.Rounded.Info) }
-
     val pullToRefreshState = rememberPullToRefreshState()
-
     var isFirstNetworkCheck by remember { mutableStateOf(true) }
+
+    // Bottom Sheet State
+    var showSignInSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(uiState.isNetworkAvailable) {
         if (isFirstNetworkCheck) {
@@ -95,7 +97,7 @@ fun HomeScreen(
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState,modifier = Modifier.padding(horizontal = 16.dp)) { data ->
                 IconSnackBar(
-                    icon = currentSnackIcon, // we'll define this state below
+                    icon = currentSnackIcon,
                     message = data.visuals.message
                 )
             }
@@ -146,7 +148,8 @@ fun HomeScreen(
                             data = uiState.data!!,
                             snackBarHostState = snackBarHostState,
                             scope = scope,
-                            navController = navController
+                            navController = navController,
+                            onSignInClick = { showSignInSheet = true }
                         )
                     }
 
@@ -162,6 +165,21 @@ fun HomeScreen(
                     }
                 }
             }
+        }
+
+        if (showSignInSheet) {
+            SignInBottomSheet(
+                onDismissRequest = { showSignInSheet = false },
+                sheetState = sheetState,
+                onGoogleSignInClick = {
+                    // TODO: Implement Google Sign In logic
+                    showSignInSheet = false
+                },
+                onStudentIdClick = {
+                    // TODO: Implement Student ID Sign In logic
+                    showSignInSheet = false
+                }
+            )
         }
     }
 }
