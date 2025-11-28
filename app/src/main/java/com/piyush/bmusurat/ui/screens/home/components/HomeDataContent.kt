@@ -129,8 +129,8 @@ fun HomeDataContent(
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Student Sign In",
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodyLarge
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLargeEmphasized
                 )
 
             }

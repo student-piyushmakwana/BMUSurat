@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.SignalWifiBad
 import androidx.compose.material.icons.rounded.Wifi
@@ -31,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -52,14 +54,13 @@ fun HomeScreen(
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var currentSnackIcon by remember { mutableStateOf(Icons.Rounded.Info) }
     val pullToRefreshState = rememberPullToRefreshState()
     var isFirstNetworkCheck by remember { mutableStateOf(true) }
-
-    // Bottom Sheet State
     var showSignInSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -89,6 +90,19 @@ fun HomeScreen(
                     snackBarHostState.showSnackbar("You're offline right now.")
                 }
             }
+        }
+    }
+
+    LaunchedEffect(uiState.signInSuccess, uiState.signInError) {
+        if (uiState.signInSuccess) {
+            currentSnackIcon = Icons.Rounded.CheckCircle
+            snackBarHostState.showSnackbar("Sign-in Successful!")
+            viewModel.resetSignInState()
+        }
+        if (uiState.signInError != null) {
+            currentSnackIcon = Icons.Rounded.Info
+            snackBarHostState.showSnackbar(uiState.signInError!!)
+            viewModel.resetSignInState()
         }
     }
 
@@ -143,6 +157,10 @@ fun HomeScreen(
                         WavyProgressIndicator(modifier = Modifier.size(52.dp))
                     }
 
+                    uiState.isSignInLoading -> {
+                        WavyProgressIndicator(modifier = Modifier.size(52.dp))
+                    }
+
                     uiState.data != null -> {
                         HomeDataContent(
                             data = uiState.data!!,
@@ -172,11 +190,10 @@ fun HomeScreen(
                 onDismissRequest = { showSignInSheet = false },
                 sheetState = sheetState,
                 onGoogleSignInClick = {
-                    // TODO: Implement Google Sign In logic
                     showSignInSheet = false
+                    viewModel.signInWithGoogle(context)
                 },
                 onStudentIdClick = {
-                    // TODO: Implement Student ID Sign In logic
                     showSignInSheet = false
                 }
             )

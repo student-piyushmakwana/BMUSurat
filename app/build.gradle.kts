@@ -97,6 +97,11 @@ dependencies {
     // Google Fonts
     implementation(libs.androidx.compose.ui.text.google.fonts)
 
+    // Google Sign In
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

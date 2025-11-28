@@ -99,8 +99,8 @@ fun SignInBottomSheet(
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "Continue with Google",
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodyLarge
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLargeEmphasized
                 )
             }
 
@@ -121,8 +121,8 @@ fun SignInBottomSheet(
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = "Sign in with Student ID",
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodyLarge
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLargeEmphasized
                 )
             }
         }

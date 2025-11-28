@@ -8,6 +8,8 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.piyush.bmusurat.data.ApiService
 import com.piyush.bmusurat.data.datastore.PreferencesDataStore
 import com.piyush.bmusurat.data.local.HomeDao
+import com.piyush.bmusurat.data.repository.AuthRepository
+import com.piyush.bmusurat.data.repository.AuthRepositoryImpl
 import com.piyush.bmusurat.data.repository.HomeRepository
 import com.piyush.bmusurat.data.repository.HomeRepositoryImpl
 import com.piyush.bmusurat.data.repository.ProgramRepository
@@ -87,6 +89,12 @@ object AppModule {
         preferencesDataStore: PreferencesDataStore
     ): ProgramRepository {
         return ProgramRepositoryImpl(apiService,preferencesDataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(): AuthRepository {
+        return AuthRepositoryImpl()
     }
 
     @Provides
